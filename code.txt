@@ -1,0 +1,4 @@
+int b EQUALS 4
+int c EQUALS 0
+c EQUALS a ADD b
+DISPLAY c
