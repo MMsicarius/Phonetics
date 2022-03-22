@@ -1,3 +1,6 @@
+import functions
+import errors
+
 file = open("code.txt", "r")
 
 code = file.read()
@@ -41,7 +44,7 @@ token = {
 
 digit = {1,2,3,4,5,6,7,8,9,0}
 character = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"}
-operator = {"+","-","*","/"}
+operator = {"ADD", "SUBTRACT", "MULTIPLY", "DIVIDE"}
 identifier = {"int"}
 
 digitToken = {
@@ -69,6 +72,7 @@ lineScanner = code.split('\n')
 #print(scanner)
 
 wordScanner = []
+tokeniser = []
 
 for i in lineScanner:
     result = i.split(' ')
@@ -77,7 +81,20 @@ for i in lineScanner:
 print(wordScanner)
 
 for i in wordScanner:
+    count = 0
     word = i
+    if functions.is_keyword(word) != "false":
+        tokeniser.append([functions.is_keyword(word), word])
+        count += 1
+    elif word.isnumeric() == True:
+        tokeniser.append(["Num", word])
+        count += 1
+    elif count - 1 == ["STR", "string"]:
+        tokeniser.append = (["WORD", word])
+    else:
+        errors.error[1]
+
+
 
 
 
