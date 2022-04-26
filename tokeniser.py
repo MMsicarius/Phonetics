@@ -5,7 +5,7 @@ file = open("code.txt", "r")
 
 code = file.read()
 
-print(code)
+#print(code)
 
 lexeme = ''
 #for i, char in enumerate(input):
@@ -72,28 +72,45 @@ lineScanner = code.split('\n')
 #print(scanner)
 
 wordScanner = []
+wordBroken = []
 tokeniser = []
 
 for i in lineScanner:
     result = i.split(' ')
     wordScanner.append(result)
 
-print(wordScanner)
+# print(wordScanner)
 
 for i in wordScanner:
-    count = 0
-    word = i
-    if functions.is_keyword(word) != "false":
-        tokeniser.append([functions.is_keyword(word), word])
-        count += 1
-    elif word.isnumeric() == True:
-        tokeniser.append(["Num", word])
-        count += 1
-    elif count - 1 == ["STR", "string"]:
-        tokeniser.append = (["WORD", word])
+    for words in i:
+        wordBroken.append(words)
+    wordBroken.append("NEWLINE")
+
+# print(wordBroken)
+
+counter = 0
+
+# [TOKEN, VALUE]
+for i in wordBroken:
+    if functions.is_keyword(i) != "false":
+        tokeniser.append([functions.is_keyword(i), i])
+    elif i.isnumeric() == True:
+        tokeniser.append(["num", i])
+    elif wordBroken[(counter - 1)] == "int" or wordBroken[(counter - 1)] == "str":
+        tokeniser.append(["variable", i])
     else:
         errors.error[1]
+    counter += 1
 
+print(tokeniser)
+
+variable_list = []
+
+for i in tokeniser:
+    token = i[0]
+    value = i[1]
+    if token in variable_list:
+# TODO Parser
 
 
 
