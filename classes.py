@@ -1,7 +1,9 @@
 class num_variable:
-    name = ""
-    value = None
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
 
 class str_variable:
-    name = ""
-    value = ""
+    def __init__(self, name, text):
+        self.name = name
+        self.value = text

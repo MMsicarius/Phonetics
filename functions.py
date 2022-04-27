@@ -1,28 +1,33 @@
 import errors
 
-numeric_keywords = [ "ADD", "SUB", "MULTIPLY", "DIVIDE"]
+numeric_keywords = [ "ADD", "SUB", "MULTIPLY", "DIVIDE", "EQUALS"]
 
-numeric_keywords_translate = ["+", "-", "*", "/"]
+numeric_keywords_translate = ["+", "-", "*", "/", "="]
 
 # INPUT
-generic_keywords = ["INT", "STRING", "DISPLAY", "NEWLINE"]
+generic_keywords = ["DISPLAY", "NEWLINE"]
 # OUTPUT
-generic_keywords_translate = ["int", "str", "print", "newline"]
-
-print(generic_keywords)
+variable_keywords = ["INT", "STRING"]
 
 def is_keyword(x):
 
     if x in generic_keywords:
         index = generic_keywords.index(x)
-        return generic_keywords_translate[index]
+        return "gen_keyword"
+    elif x in variable_keywords:
+        index = variable_keywords.index(x)
+        return "var_keyword"
     elif x in numeric_keywords:
         index = numeric_keywords.index(x)
         return numeric_keywords_translate[index]
     else:
         return "false"
 
-
+def is_variable(x):
+    if x in generic_keywords:
+        return "false"
+    else:
+        return "true"
 
 def addition():
     return 0

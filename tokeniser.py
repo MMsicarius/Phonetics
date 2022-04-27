@@ -1,5 +1,6 @@
 import functions
 import errors
+import classes
 
 file = open("code.txt", "r")
 
@@ -32,41 +33,6 @@ def tokenKey(dictionary, value):
             key.append(key)
     return key
 
-token = {
-    "digit": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
-    "character": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
-                  "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
-                  "w", "x", "y", "z"],
-    "operator": ["+", "-", "*", "/"],
-    "identifier": ["int"],
-    "whiteSpace": " "
-}
-
-digit = {1,2,3,4,5,6,7,8,9,0}
-character = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"}
-operator = {"ADD", "SUBTRACT", "MULTIPLY", "DIVIDE"}
-identifier = {"int"}
-
-digitToken = {
-    '1': 1,
-    '2': 2,
-    '3': 3,
-    '4': 4,
-    '5': 5,
-    '6': 6,
-    '7': 7,
-    '8': 8,
-    '9': 9,
-    '0': 0
-}
-
-#for i, char in enumerate(input):
-#    print(str(i+1).rjust(3, ' '), ':', char)
-
-#tokenExist = token.get(["3"])
-#print(tokenExist)
-
-#tokenKey(token, "4")
 
 lineScanner = code.split('\n')
 #print(scanner)
@@ -96,20 +62,43 @@ for i in wordBroken:
         tokeniser.append([functions.is_keyword(i), i])
     elif i.isnumeric() == True:
         tokeniser.append(["num", i])
-    elif wordBroken[(counter - 1)] == "int" or wordBroken[(counter - 1)] == "str":
+    elif functions.is_variable((counter-1)) == "true":
         tokeniser.append(["variable", i])
     else:
-        errors.error[1]
+        errors.error_call(1)
     counter += 1
 
+#print(wordBroken)
 print(tokeniser)
-
+# mode 0 = starting point, 1 = variable declaration, 2 variable creation
+mode = 0
+parser_counter = 0
 variable_list = []
 
 for i in tokeniser:
     token = i[0]
     value = i[1]
-    if token in variable_list:
+    if token == "var_keyword":
+        mode = 1
+    elif token == "variable":
+        if value not in variable_list:
+            if mode == 1 and tokeniser[1][(parser_counter - 1)] == "INT":
+                variable_list.append(value)
+                value = classes.num_variable(value, None)
+                mode = 2
+            elif mode == 1 and tokeniser[1][(parser_counter - 1)] == "STRING":
+                variable_list.append(value)
+                value = classes.str_variable(value, None)
+            else:
+                errors.error_call(2)
+    elif token == "=":
+        if mode == 2:
+            tokeniser[1][parser_counter - 1].value = tokeniser[1][i]
+        else:
+            errors.error_call(2)
+    parser_counter += 1
+
+print(a.__dict__)
 # TODO Parser
 
 
