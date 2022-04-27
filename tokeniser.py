@@ -55,6 +55,7 @@ for i in wordScanner:
 # print(wordBroken)
 
 counter = 0
+line_counter = 1
 
 # [TOKEN, VALUE]
 for i in wordBroken:
@@ -65,15 +66,24 @@ for i in wordBroken:
     elif functions.is_variable((counter-1)) == "true":
         tokeniser.append(["variable", i])
     else:
-        errors.error_call(1)
+        errors.error_call(1, line_counter)
+    if i == "NEWLINE":
+        line_counter += 1
     counter += 1
 
 #print(wordBroken)
 print(tokeniser)
-# mode 0 = starting point, 1 = variable declaration, 2 variable creation
-mode = 0
+# 0 = starting point, 1 = variable declaration,
+# 2 variable creation, 3 value assignment, 4 arithmetic mode,
+# 5 display mode, 6 operand handling
+mode = 0  # denotes state of parser
 parser_counter = 0
-variable_list = []
+line_counter = 1
+variable_index = []  # holds the variable name
+variable_list = []  # holds the token and value
+arithmetic_buffer = []  # holds all the values and operand for a specific line
+arithmetic_handler = None  # holds the value before placing in the buffer
+answer = None
 
 for i in tokeniser:
     token = i[0]
@@ -82,23 +92,56 @@ for i in tokeniser:
         mode = 1
     elif token == "variable":
         if value not in variable_list:
-            if mode == 1 and tokeniser[1][(parser_counter - 1)] == "INT":
-                variable_list.append(value)
-                value = classes.num_variable(value, None)
+            if mode == 1 and tokeniser[(parser_counter - 1)][1] == "INT":
+                variable_index.append(value)
+                variable_list.append([tokeniser[(parser_counter - 1)][1], None])
                 mode = 2
-            elif mode == 1 and tokeniser[1][(parser_counter - 1)] == "STRING":
-                variable_list.append(value)
-                value = classes.str_variable(value, None)
+            elif mode == 1 and tokeniser[(parser_counter - 1)][1] == "STRING":
+                variable_index.append(value)
+                variable_list.append(tokeniser[(parser_counter - 1)][1], None)
             else:
-                errors.error_call(2)
+                errors.error_call(2, line_counter)
+        elif mode == 4:
+            arithmetic_handler = value
+            mode = 6
+        else:
+            errors.error_call(2, line_counter)
     elif token == "=":
         if mode == 2:
-            tokeniser[1][parser_counter - 1].value = tokeniser[1][i]
+            mode = 3
+        elif mode == 0:
+            mode = 4
+            # TODO arithmetic
         else:
-            errors.error_call(2)
+            errors.error_call(2, line_counter)
+    elif token == "num":
+        if mode == 3:
+            if variable_list[(len(variable_list) - 1)][0] == "INT":
+                variable_list[(len(variable_list)-1)][1] = value
+                mode = 0
+            else:
+                errors.error_call(3, line_counter)
+        else:
+            errors.error_call(2, line_counter)
+    elif token == "-":
+        pass
+        # TODO minus
+    elif token == "+":
+        pass
+        # TODO add
+    elif token == "*":
+        pass
+        # TODO multiply
+    elif token == "/":
+        pass
+        # TODO divide
+    elif token == "gen_keyword":
+        if value == "NEWLINE":
+            line_counter += 1
+        elif value == "DISPLAY":
+            mode = 5
     parser_counter += 1
-
-print(a.__dict__)
+    print(variable_list, variable_index)
 # TODO Parser
 
 
