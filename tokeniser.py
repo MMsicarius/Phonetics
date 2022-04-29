@@ -75,14 +75,22 @@ for i in wordBroken:
 print(tokeniser)
 # 0 = starting point, 1 = variable declaration,
 # 2 variable creation, 3 value assignment, 4 arithmetic mode,
-# 5 display mode, 6 operand handling
+# 5 operand handling, 6 display handling, 7 left-side assignment
 mode = 0  # denotes state of parser
 parser_counter = 0
 line_counter = 1
 variable_index = []  # holds the variable name
 variable_list = []  # holds the token and value
+
+#  arithmetic engine
 arithmetic_buffer = []  # holds all the values and operand for a specific line
-arithmetic_handler = None  # holds the value before placing in the buffer
+arithmetic_position_buffer = []  # holds the position and priority of value
+left_side_buffer = []
+bracket_priority = 5
+priority_max = 0  # holds the highest priority in the equation
+bracket_buffer = []  # holds the values relating to within a given bracket
+answer_buffer = []  # holds answers for future buffer rewrites
+display_buffer = []
 answer = None
 
 for i in tokeniser:
@@ -91,7 +99,7 @@ for i in tokeniser:
     if token == "var_keyword":
         mode = 1
     elif token == "variable":
-        if value not in variable_list:
+        if value not in variable_index:
             if mode == 1 and tokeniser[(parser_counter - 1)][1] == "INT":
                 variable_index.append(value)
                 variable_list.append([tokeniser[(parser_counter - 1)][1], None])
@@ -101,15 +109,23 @@ for i in tokeniser:
                 variable_list.append(tokeniser[(parser_counter - 1)][1], None)
             else:
                 errors.error_call(2, line_counter)
+        elif mode == 0 and value in variable_index:
+            left_side_buffer.append(value)
+            mode = 7
+        elif mode == 7 and value in variable_index:
+            left_side_buffer.append(value)
         elif mode == 4:
-            arithmetic_handler = value
-            mode = 6
+            arithmetic_buffer.append(value)
+            arithmetic_position_buffer.append(0)
+            mode = 5
+        elif mode == 6 and value in variable_index:
+            display_buffer.append(value)
         else:
             errors.error_call(2, line_counter)
     elif token == "=":
         if mode == 2:
             mode = 3
-        elif mode == 0:
+        elif mode == 7:
             mode = 4
             # TODO arithmetic
         else:
@@ -121,27 +137,97 @@ for i in tokeniser:
                 mode = 0
             else:
                 errors.error_call(3, line_counter)
+        elif mode == 4:
+            arithmetic_buffer.append(value)
+            arithmetic_position_buffer.append(0)
+            mode = 5
         else:
             errors.error_call(2, line_counter)
     elif token == "-":
-        pass
-        # TODO minus
+        if mode == 5:
+            arithmetic_buffer.append(token)
+            arithmetic_position_buffer.append(1)
+            mode = 4
+            if priority_max < 1:
+                priority_max = 1
+        else:
+            errors.error_call(2, line_counter)
+            # TODO minus string handling
     elif token == "+":
-        pass
-        # TODO add
+        if mode == 5:
+            arithmetic_buffer.append(token)
+            arithmetic_position_buffer.append(2)
+            mode = 4
+            if priority_max < 2:
+                priority_max = 2
+        else:
+            errors.error_call(2, line_counter)
+        # TODO add string handling
     elif token == "*":
-        pass
+        if mode == 5:
+            arithmetic_buffer.append(token)
+            arithmetic_position_buffer.append(3)
+            mode = 4
+            if priority_max < 3:
+                priority_max = 3
+        else:
+            errors.error_call(2, line_counter)
         # TODO multiply
     elif token == "/":
-        pass
+        if mode == 5:
+            arithmetic_buffer.append(token)
+            arithmetic_position_buffer.append(4)
+            mode = 4
+            if priority_max < 4:
+                priority_max = 4
+        else:
+            errors.error_call(2, line_counter)
         # TODO divide
+    elif token == "^":
+        if mode == 5:
+            arithmetic_buffer.append(token)
+            arithmetic_position_buffer.append(5)
+            mode = 4
+            if priority_max < 5:
+                priority_max = 5
+        else:
+            errors.error_call(2, line_counter)
+    elif token == "(":
+        if mode == 5:
+            bracket_priority += 1
+            arithmetic_buffer.append(token)
+            arithmetic_position_buffer.append(bracket_priority)
+            mode = 4
+            if priority_max < bracket_priority:
+                priority_max = bracket_priority
+        else:
+            errors.error_call(2, line_counter)
+    elif token == ")":
+        if mode == 5:
+            arithmetic_buffer.append(token)
+            arithmetic_position_buffer.append(bracket_priority)
+            mode = 4
+            if priority_max < bracket_priority:
+                priority_max = bracket_priority
+            bracket_priority -= 1
+        else:
+            errors.error_call(2, line_counter)
     elif token == "gen_keyword":
         if value == "NEWLINE":
+            if mode == 6:
+                print("".join(str(x) for x in display_buffer))
+            # TODO display variables
+            elif mode == 5:
+                for j in left_side_buffer:
+                    answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer,
+                                                  priority_max, variable_list, variable_index)
+                    position = variable_index.index(j)
+                    variable_list[position][1] = answer
             line_counter += 1
         elif value == "DISPLAY":
-            mode = 5
+            mode = 6
     parser_counter += 1
-    print(variable_list, variable_index)
+    print(variable_list, variable_index, mode, left_side_buffer, arithmetic_buffer, arithmetic_position_buffer)
 # TODO Parser
 
 
