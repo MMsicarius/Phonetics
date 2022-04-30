@@ -61,8 +61,8 @@ line_counter = 1
 for i in wordBroken:
     if functions.is_keyword(i) != "false":
         tokeniser.append([functions.is_keyword(i), i])
-    elif i.isnumeric() == True:
-        tokeniser.append(["num", i])
+    elif i.isnumeric():
+        tokeniser.append(["num", int(i)])
     elif functions.is_variable((counter-1)) == "true":
         tokeniser.append(["variable", i])
     else:
@@ -127,7 +127,6 @@ for i in tokeniser:
             mode = 3
         elif mode == 7:
             mode = 4
-            # TODO arithmetic
         else:
             errors.error_call(2, line_counter)
     elif token == "num":
@@ -215,6 +214,11 @@ for i in tokeniser:
     elif token == "gen_keyword":
         if value == "NEWLINE":
             if mode == 6:
+                counter = 0
+                for i in display_buffer:
+                    if i in variable_index:
+                        display_buffer[counter] = variable_list[(variable_index.index(i))][1]
+                counter += 1
                 print("".join(str(x) for x in display_buffer))
             # TODO display variables
             elif mode == 5:
@@ -227,7 +231,7 @@ for i in tokeniser:
         elif value == "DISPLAY":
             mode = 6
     parser_counter += 1
-    print(variable_list, variable_index, mode, left_side_buffer, arithmetic_buffer, arithmetic_position_buffer)
+    #print(variable_list, variable_index, mode, left_side_buffer, arithmetic_buffer, arithmetic_position_buffer)
 # TODO Parser
 
 

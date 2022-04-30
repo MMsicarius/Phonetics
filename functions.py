@@ -45,7 +45,14 @@ def divide(x, y):
 def power(x, y):
     answer = pow(x, y)
     return answer
-#  TODO arithmatic engine needs fixing
+
+def boolean(x, y):
+    if x == y:
+        return 1
+    else:
+        return 0
+#  TODO Boolean function
+
 def simple_arithmetic(x, y, var_list, var_index):
     equation = x
     priority = y
@@ -59,9 +66,8 @@ def simple_arithmetic(x, y, var_list, var_index):
 
     for i in equation:
         if i in variable_index:
-            variable_index[counter] = variable_list[(variable_index.index(i))][1]
+            equation[counter] = variable_list[(variable_index.index(i))][1]
         counter += 1
-
     counter = 0
 
     while priority_counter > 0:
@@ -106,7 +112,7 @@ def simple_arithmetic(x, y, var_list, var_index):
                     exists += 1
                 else:
                     counter += 1
-            exists -= 1
+            exists = exists - 1
             counter = 0
             if len(answer_buffer) > 0:
                 midway_buffer.clear()
@@ -127,6 +133,7 @@ def simple_arithmetic(x, y, var_list, var_index):
                 equation = midway_buffer
                 priority = midway_position_buffer
                 counter = 0
+        priority_counter -= 1
     return equation[0]
 
 
