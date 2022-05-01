@@ -6,26 +6,6 @@ file = open("code.txt", "r")
 
 code = file.read()
 
-#print(code)
-
-lexeme = ''
-#for i, char in enumerate(input):
-#    lexeme += char
-#    if (i+1 < len(input)):
-#        if input [i+1] == whiteSpace:
-#            print(lexeme)
-#            lexeme = ''
-#print(lexeme)
-
-#for i, char in enumerate(input):
-#    if char != whiteSpace:
-#        lexeme += char
-#    if (i + 1 < len(input)):
-#        if input [i + 1] == whiteSpace:
-#            print(lexeme)
-#            lexeme = ''
-#print(lexeme)
-
 def tokenKey(dictionary, value):
     key = []
     for keys in dictionary:
@@ -52,8 +32,6 @@ for i in wordScanner:
         wordBroken.append(words)
     wordBroken.append("NEWLINE")
 
-# print(wordBroken)
-
 counter = 0
 line_counter = 1
 
@@ -63,8 +41,13 @@ for i in wordBroken:
         tokeniser.append([functions.is_keyword(i), i])
     elif i.isnumeric():
         tokeniser.append(["num", int(i)])
-    elif functions.is_variable((counter-1)) == "true":
+    elif functions.is_variable(wordBroken[(counter-1)]) == "true":
         tokeniser.append(["variable", i])
+        functions.variable_add(i)
+    elif functions.variable_check(i) == "true":
+        tokeniser.append(["variable", i])
+    elif i == "TRUE" or i == "FALSE":
+        tokeniser.append(["boolean", i])
     else:
         errors.error_call(1, line_counter)
     if i == "NEWLINE":
@@ -107,6 +90,10 @@ for i in tokeniser:
             elif mode == 1 and tokeniser[(parser_counter - 1)][1] == "STRING":
                 variable_index.append(value)
                 variable_list.append(tokeniser[(parser_counter - 1)][1], None)
+            elif mode == 1 and tokeniser[(parser_counter - 1)][1] == "BOOLEAN":
+                variable_index.append(value)
+                variable_list.append([tokeniser[(parser_counter - 1)][1], None])
+                mode = 2
             else:
                 errors.error_call(2, line_counter)
         elif mode == 0 and value in variable_index:
@@ -142,6 +129,13 @@ for i in tokeniser:
             mode = 5
         else:
             errors.error_call(2, line_counter)
+    elif token == "boolean":
+        if mode == 3:
+            if variable_list[(len(variable_list) - 1)][0] == "BOOLEAN":
+                variable_list[(len(variable_list) - 1)][1] = value
+                mode = 0
+            else:
+                errors.error_call(3, line_counter)
     elif token == "-":
         if mode == 5:
             arithmetic_buffer.append(token)
@@ -220,7 +214,6 @@ for i in tokeniser:
                         display_buffer[counter] = variable_list[(variable_index.index(i))][1]
                 counter += 1
                 print("".join(str(x) for x in display_buffer))
-            # TODO display variables
             elif mode == 5:
                 for j in left_side_buffer:
                     answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer,
@@ -232,7 +225,8 @@ for i in tokeniser:
             mode = 6
     parser_counter += 1
     #print(variable_list, variable_index, mode, left_side_buffer, arithmetic_buffer, arithmetic_position_buffer)
-# TODO Parser
+# TODO handle boolean expression
+# TODO string handling
 
 
 
