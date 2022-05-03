@@ -1,12 +1,13 @@
 import errors
 
-numeric_keywords = ["ADD", "SUB", "MULTIPLY", "DIVIDE", "EQUALS", "POWER", "OPENBRACKET", "CLOSEBRACKET"]
+numeric_keywords = ["ADD", "SUB", "MULTIPLY", "DIVIDE", "EQUALS", "POWER", "OPENBRACKET", "CLOSEBRACKET", "EQUIV", "NOTEVQUIV", "GREATERTHAN, LESSTHAN"]
 
-numeric_keywords_translate = ["+", "-", "*", "/", "=", "^", "(", ")"]
+numeric_keywords_translate = ["+", "-", "*", "/", "=", "^", "(", ")", "==", "!=", ">", "<"]
 
-# INPUT
+logic_keywords = ["IF", "ELSE", "AND", "OR", "NOT"]
+
 generic_keywords = ["DISPLAY", "NEWLINE"]
-# OUTPUT
+
 variable_keywords = ["INT", "STRING", "BOOLEAN"]
 
 variable_list_tokeniser = []
@@ -19,6 +20,10 @@ def is_keyword(x):
     elif x in numeric_keywords:
         index = numeric_keywords.index(x)
         return numeric_keywords_translate[index]
+    elif x in logic_keywords:
+        return "logic_keyword"
+    elif x == "SENTENCE":
+        return "SENTENCE"
     else:
         return "false"
 
@@ -59,10 +64,28 @@ def power(x, y):
 
 def boolean(x, y):
     if x == y:
-        return True
+        return "TRUE"
     else:
-        return False
-#  TODO Boolean function
+        return "FALSE"
+
+def boolean_not_equal(x, y):
+    if x != y:
+        return "TRUE"
+    else:
+        return "FALSE"
+
+def boolean_handling(x, y):
+    if x and y == "TRUE":
+        return "TRUE"
+    else:
+        return "FALSE"
+
+def word_add(x, y):
+    if x == "[]":
+        return y
+    else:
+        answer = x + " " + y
+        return answer
 
 def simple_arithmetic(x, y, var_list, var_index):
     equation = []
