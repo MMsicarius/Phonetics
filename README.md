@@ -11,21 +11,34 @@ INT -> int
 STRING -> string
 BOOLEAN -> boolean
 
-Numeric Keywords
+Numeric Keywords:
+
 ADD -> +
+
 SUB -> -
+
 MULTIPLY -> *
+
 DIVIDE -> /
+
 EQUALS -> =
+
 POWER -> ^
+
 OPENBRACKET -> (
+
 CLOSEBRACKET -> )
+
 EQUIV -> ==
+
 NOTEQUIV -> !=
+
 GREATERTHAN -> >
+
 LESSTHAN -> <
 
-Generic Keywords
+Generic Keywords:
+
 DISPLAY -> displays and variables, numeric or string data
 
 
