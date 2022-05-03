@@ -87,6 +87,12 @@ def word_add(x, y):
         answer = x + " " + y
         return answer
 
+def greater_than (x, y):
+    if x > y:
+        return "TRUE"
+    else:
+        return "FALSE"
+
 def simple_arithmetic(x, y, var_list, var_index):
     equation = []
     priority = []

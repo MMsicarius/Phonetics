@@ -70,6 +70,7 @@ not_equal = 0
 parser_counter = 0
 line_counter = 1
 boolean_handling = 0
+greater_than_count = 0
 variable_index = []  # holds the variable name
 variable_list = []  # holds the token and value
 assignment_buffer = []
@@ -154,6 +155,15 @@ for i in tokeniser:
             assignment_buffer.clear()
             arithmetic_position_buffer.clear()
             priority_max = 0
+        elif mode == 3 and assignment_mode == 1 and greater_than_count == 1:
+            answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer, priority_max,
+                                          variable_list, variable_index)
+            equivalence_buffer[0] = functions.greater_than(equivalence_buffer[0], answer)
+            equivalence_mode = 1
+            assignment_buffer.clear()
+            arithmetic_position_buffer.clear()
+            priority_max = 0
+            greater_than_count = 0
         elif mode == 3 and boolean_handling == 1:
             equivalence_buffer.append(assignment_buffer[0])
             equivalence_mode = 1
@@ -215,7 +225,6 @@ for i in tokeniser:
                 priority_max = 2
         else:
             errors.error_call(2, line_counter)
-        # TODO add string handling
     elif token == "*":
         if mode == 5:
             arithmetic_buffer.append(token)
@@ -231,7 +240,6 @@ for i in tokeniser:
                 priority_max = 3
         else:
             errors.error_call(2, line_counter)
-        # TODO multiply
     elif token == "/":
         if mode == 5:
             arithmetic_buffer.append(token)
@@ -247,7 +255,6 @@ for i in tokeniser:
                 priority_max = 4
         else:
             errors.error_call(2, line_counter)
-        # TODO divide
     elif token == "^":
         if mode == 5:
             arithmetic_buffer.append(token)
@@ -291,6 +298,17 @@ for i in tokeniser:
             if priority_max < bracket_priority:
                 priority_max = bracket_priority
             bracket_priority -= 1
+        else:
+            errors.error_call(2, line_counter)
+    elif token == ">":
+        if mode == 3:
+            answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer, priority_max,
+                                          variable_list, variable_index)
+            equivalence_buffer.append(answer)
+            assignment_buffer.clear()
+            arithmetic_position_buffer.clear()
+            priority_max = 0
+            greater_than_count = 1
         else:
             errors.error_call(2, line_counter)
     elif token == "gen_keyword":
