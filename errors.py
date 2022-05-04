@@ -7,3 +7,4 @@ error = {
 
 def error_call(x, y):
     return exit(f"{error[x]} on line {y}")
+

@@ -91,6 +91,12 @@ def greater_than (x, y):
     if x > y:
         return "TRUE"
     else:
+        return
+
+def less_than (x, y):
+    if x < y:
+        return "TRUE"
+    else:
         return "FALSE"
 
 def simple_arithmetic(x, y, var_list, var_index):

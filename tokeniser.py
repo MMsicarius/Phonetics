@@ -1,6 +1,5 @@
 import functions
 import errors
-import classes
 
 file = open("code.txt", "r")
 
@@ -158,8 +157,9 @@ for i in tokeniser:
         elif mode == 3 and assignment_mode == 1 and greater_than_count == 1:
             answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer, priority_max,
                                           variable_list, variable_index)
-            equivalence_buffer[0] = functions.greater_than(equivalence_buffer[0], answer)
+            equivalence_buffer.append((functions.greater_than(equivalence_buffer[0], answer)))
             equivalence_mode = 1
+            boolean_handling += 1
             assignment_buffer.clear()
             arithmetic_position_buffer.clear()
             priority_max = 0
@@ -169,6 +169,7 @@ for i in tokeniser:
             equivalence_mode = 1
             assignment_buffer.clear()
     elif token == "!=":
+        # TODO > handling
         if mode == 3 and assignment_mode == 1:
             answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer, priority_max
                                           , variable_list, variable_index)
@@ -308,7 +309,18 @@ for i in tokeniser:
             assignment_buffer.clear()
             arithmetic_position_buffer.clear()
             priority_max = 0
-            greater_than_count = 1
+            greater_than_count += 1
+        else:
+            errors.error_call(2, line_counter)
+    elif token == "<":
+        if mode == 3:
+            answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer, priority_max,
+                                      variable_list, variable_index)
+            equivalence_buffer.append(answer)
+            assignment_buffer.clear()
+            arithmetic_position_buffer.clear()
+            priority_max = 0
+            greater_than_count -= 1
         else:
             errors.error_call(2, line_counter)
     elif token == "gen_keyword":
@@ -361,6 +373,26 @@ for i in tokeniser:
                 else:
                     errors.error_call(3, line_counter)
             elif mode == 3 and equivalence_mode == 1:  # assign boolean output from 2 sides
+                if greater_than_count == 1:
+                    answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer, priority_max,
+                                                  variable_list, variable_index)
+                    equivalence_buffer.append((functions.greater_than(equivalence_buffer[0], answer)))
+                    boolean_handling += 1
+                    assignment_buffer.clear()
+                    arithmetic_position_buffer.clear()
+                    priority_max = 0
+                    greater_than_count = 0
+                elif greater_than_count == -1:
+                    answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer, priority_max,
+                                                  variable_list, variable_index)
+                    equivalence_buffer.append((functions.less_than(equivalence_buffer[0], answer)))
+                    boolean_handling += 1
+                    assignment_buffer.clear()
+                    arithmetic_position_buffer.clear()
+                    priority_max = 0
+                    greater_than_count = 0
+                else:
+                    pass
                 if boolean_handling == 2:
                     assignment_result = functions.boolean_handling(equivalence_buffer[0], assignment_buffer[0])
                     if variable_list[(len(variable_list) - 1)][0] == "BOOLEAN":
@@ -375,7 +407,7 @@ for i in tokeniser:
                     errors.error_call(4, line_counter)
                 elif boolean_handling == 0:
                     answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer, priority_max,
-                                              variable_list, variable_index)
+                                                  variable_list, variable_index)
                     if not_equal == 1:
                         assignment_result = functions.boolean_not_equal(equivalence_buffer[0], answer)
                         not_equal = 0
