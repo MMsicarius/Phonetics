@@ -1,7 +1,7 @@
 import functions
 import errors
 
-file = open("code.txt", "r")
+file = open("boolean.txt", "r")
 
 code = file.read()
 
@@ -49,6 +49,10 @@ for i in wordBroken:
         tokeniser.append(["variable", i])
     elif i == "TRUE" or i == "FALSE":
         tokeniser.append(["boolean", i])
+    elif i == "":
+        tokeniser.append(["LINE", i])
+    elif i in functions.numeric_keywords_translate:
+        errors.error_call(5, line_counter)
     else:
         errors.error_call(1, line_counter)
     if i == "NEWLINE":
@@ -70,6 +74,7 @@ parser_counter = 0
 line_counter = 1
 boolean_handling = 0
 greater_than_count = 0
+resolved = 0
 variable_index = []  # holds the variable name
 variable_list = []  # holds the token and value
 assignment_buffer = []
@@ -159,17 +164,22 @@ for i in tokeniser:
                                           variable_list, variable_index)
             equivalence_buffer.append((functions.greater_than(equivalence_buffer[0], answer)))
             equivalence_mode = 1
-            boolean_handling += 1
             assignment_buffer.clear()
             arithmetic_position_buffer.clear()
             priority_max = 0
             greater_than_count = 0
+            resolved = -1
+        elif mode == 3 and assignment_mode == 1 and greater_than_count == -1:
+            pass
+            # TODO less than handling
         elif mode == 3 and boolean_handling == 1:
+            equivalence_buffer.append(0)
             equivalence_buffer.append(assignment_buffer[0])
             equivalence_mode = 1
             assignment_buffer.clear()
+        else:
+            errors.error_call(2, line_counter)
     elif token == "!=":
-        # TODO > handling
         if mode == 3 and assignment_mode == 1:
             answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer, priority_max
                                           , variable_list, variable_index)
@@ -179,6 +189,7 @@ for i in tokeniser:
             assignment_buffer.clear()
             arithmetic_position_buffer.clear()
             priority_max = 0
+            # TODO handling with > and <
     elif token == "num":
         if mode == 3:
             assignment_buffer.append(value)
@@ -196,6 +207,12 @@ for i in tokeniser:
         if mode == 3:
             assignment_buffer.append(value)
             boolean_handling += 1
+        elif mode == 4:
+            equivalence_buffer.append(value)
+            boolean_handling += 1
+            mode = 5
+        else:
+            errors.error_call(2, line_counter)
     elif token == "-":
         if mode == 5:
             arithmetic_buffer.append(token)
@@ -310,6 +327,16 @@ for i in tokeniser:
             arithmetic_position_buffer.clear()
             priority_max = 0
             greater_than_count += 1
+            boolean_handling += 1
+            equivalence_mode = 1
+        elif mode == 5:
+            answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer, priority_max,
+                                          variable_list, variable_index)
+            equivalence_buffer.append(answer)
+            arithmetic_buffer.clear()
+            arithmetic_position_buffer.clear()
+            priority_max = 0
+            greater_than_count += 1
         else:
             errors.error_call(2, line_counter)
     elif token == "<":
@@ -321,6 +348,11 @@ for i in tokeniser:
             arithmetic_position_buffer.clear()
             priority_max = 0
             greater_than_count -= 1
+            equivalence_mode = 1
+            boolean_handling += 1
+        elif mode == 5:
+            pass
+            # TODO less than
         else:
             errors.error_call(2, line_counter)
     elif token == "gen_keyword":
@@ -330,9 +362,12 @@ for i in tokeniser:
                 for i in display_buffer:
                     if i in variable_index:
                         display_buffer[counter] = variable_list[(variable_index.index(i))][1]
-                counter += 1
-                print("".join(str(x) for x in display_buffer))
-            elif mode == 5:  # assigning new values to existing variables
+                        counter += 1
+                print(" ".join(str(x) for x in display_buffer))
+                mode = 0
+            elif mode == 0:
+                pass
+            elif mode == 5 and equivalence_mode == 0:  # assigning new values to existing variables
                 for j in left_side_buffer:
                     answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer,
                                                   priority_max, variable_list, variable_index)
@@ -342,6 +377,34 @@ for i in tokeniser:
                 arithmetic_position_buffer.clear()
                 left_side_buffer.clear()
                 priority_max = 0
+                mode = 0
+            elif mode == 5 and greater_than_count != 0:
+                if greater_than_count == 1:
+                    answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer,
+                                                  priority_max, variable_list, variable_index)
+                    answer = functions.greater_than(equivalence_buffer[0], answer)
+                    for k in left_side_buffer:
+                        position = variable_index.index(k)
+                        variable_list[position][1] = answer
+                    equivalence_buffer.clear()
+                    arithmetic_buffer.clear()
+                    arithmetic_position_buffer.clear()
+                    left_side_buffer.clear()
+                    priority_max = 0
+                    mode = 0
+                elif greater_than_count == -1:
+                    answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer,
+                                                  priority_max, variable_list, variable_index)
+                    answer = functions.less_than(equivalence_buffer[0], answer)
+                    for k in left_side_buffer:
+                        position = variable_index.index(k)
+                        variable_list[position][1] = answer
+                    equivalence_buffer.clear()
+                    arithmetic_buffer.clear()
+                    arithmetic_position_buffer.clear()
+                    left_side_buffer.clear()
+                    priority_max = 0
+                    mode = 0
             elif mode == 3 and equivalence_mode == 0 and len(assignment_buffer) > 1:  # assign variable value with
                 # equation involved
                 answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer,
@@ -394,7 +457,10 @@ for i in tokeniser:
                 else:
                     pass
                 if boolean_handling == 2:
-                    assignment_result = functions.boolean_handling(equivalence_buffer[0], assignment_buffer[0])
+                    if resolved == -1:
+                        assignment_result = functions.boolean_handling(equivalence_buffer[1], assignment_buffer[0])
+                    else:
+                        assignment_result = equivalence_buffer[1]
                     if variable_list[(len(variable_list) - 1)][0] == "BOOLEAN":
                         variable_list[(len(variable_list) - 1)][1] = assignment_result
                     mode = 0
@@ -421,6 +487,7 @@ for i in tokeniser:
                     arithmetic_position_buffer.clear()
                     equivalence_buffer.clear()
                     priority_max = 0
+                    mode = 0
                 else:
                     errors.error_call(3, line_counter)
             elif mode == 3 and len(sentence_holder) > 0:  # assigning string variable
@@ -431,18 +498,19 @@ for i in tokeniser:
                 errors.error_call(2, line_counter)
             line_counter += 1
         elif value == "DISPLAY":
-            mode = 6
+            if mode == 0:
+                mode = 6
+            else:
+                errors.error_call(2, line_counter)
+    elif token == "LINE":
+        pass
     else:
         errors.error_call(2, line_counter)
     parser_counter += 1
-    print(variable_list, variable_index, mode, left_side_buffer, arithmetic_buffer, arithmetic_position_buffer,
-          assignment_buffer, equivalence_buffer)
-# TODO handle boolean expression (<, >, not)
+    line_counter_debug = 1
+    if line_counter != line_counter_debug:
+        print(variable_list, variable_index, mode, left_side_buffer, arithmetic_buffer, arithmetic_position_buffer,
+                assignment_buffer, equivalence_buffer, greater_than_count)
+        line_counter_debug += 1
+# TODO handle boolean expression (not)
 
-
-
-
-
-#for i in lexer:
-#    if i.isnumeric() == True:
-#        try:

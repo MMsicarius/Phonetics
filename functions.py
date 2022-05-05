@@ -1,6 +1,7 @@
 import errors
 
-numeric_keywords = ["ADD", "SUB", "MULTIPLY", "DIVIDE", "EQUALS", "POWER", "OPENBRACKET", "CLOSEBRACKET", "EQUIV", "NOTEVQUIV", "GREATERTHAN, LESSTHAN"]
+numeric_keywords = ["ADD", "SUB", "MULTIPLY", "DIVIDE", "EQUALS", "POWER",
+                    "OPENBRACKET", "CLOSEBRACKET", "EQUIV", "NOTEQUIV", "GREATERTHAN", "LESSTHAN"]
 
 numeric_keywords_translate = ["+", "-", "*", "/", "=", "^", "(", ")", "==", "!=", ">", "<"]
 
@@ -91,7 +92,7 @@ def greater_than (x, y):
     if x > y:
         return "TRUE"
     else:
-        return
+        return "FALSE"
 
 def less_than (x, y):
     if x < y:
@@ -192,7 +193,6 @@ def simple_arithmetic(x, y, var_list, var_index):
                 for i in midway_position_buffer:
                     priority.append(i)
         priority_counter -= 1
-        #  TODO equation update bug needs fixing
     return equation[0]
 
 
