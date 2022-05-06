@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="779007d1-39e0-4371-9cee-9d37c9d22b58" name="Default Changelist" comment="added greater than functionality to left side of equation">
-      <change afterPath="$PROJECT_DIR$/boolean.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/string.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/first steps.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/first steps.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="779007d1-39e0-4371-9cee-9d37c9d22b58" name="Default Changelist" comment="&gt; and &lt; fully implemented. == nearly fully implemented. new todo added">
+      <change afterPath="$PROJECT_DIR$/control_flow.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code.txt" beforeDir="false" afterPath="$PROJECT_DIR$/code.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/errors.py" beforeDir="false" afterPath="$PROJECT_DIR$/errors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/code.txt" beforeDir="false" afterPath="$PROJECT_DIR$/arithmetic.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tokeniser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tokeniser.py" afterDir="false" />
     </list>
@@ -305,7 +302,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651559086708</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="&gt; and &lt; fully implemented. == nearly fully implemented. new todo added">
+      <created>1651716689049</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1651716689049</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TodoView">
@@ -374,15 +378,21 @@
     <MESSAGE value="arithmatic engine works without bugs. variable checking has been added to the tokeniser. boolean variables implmented." />
     <MESSAGE value="implemented string handling. implemented boolean handling (==, !=). added function to handle these conditions. modified tokeniser to handle both boolean and stings types, variables and words." />
     <MESSAGE value="added greater than functionality to left side of equation" />
-    <option name="LAST_COMMIT_MESSAGE" value="added greater than functionality to left side of equation" />
+    <MESSAGE value="&gt; and &lt; fully implemented. == nearly fully implemented. new todo added" />
+    <option name="LAST_COMMIT_MESSAGE" value="&gt; and &lt; fully implemented. == nearly fully implemented. new todo added" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tokeniser.py</url>
-          <line>39</line>
-          <option name="timeStamp" value="37" />
+          <line>130</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tokeniser.py</url>
+          <line>491</line>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
