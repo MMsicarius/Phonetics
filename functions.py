@@ -5,7 +5,7 @@ numeric_keywords = ["ADD", "SUB", "MULTIPLY", "DIVIDE", "EQUALS", "POWER",
 
 numeric_keywords_translate = ["+", "-", "*", "/", "=", "^", "(", ")", "==", "!=", ">", "<"]
 
-logic_keywords = ["IF", "ELSE", "AND", "OR", "NOT", "THEN", "ENDIF"]
+logic_keywords = ["IF", "ELSE", "AND", "OR", "NOT", "THEN", "ENDIF", "WHILE", "ENDWHILE"]
 
 generic_keywords = ["DISPLAY", "NEWLINE"]
 
