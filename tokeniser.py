@@ -110,7 +110,7 @@ while while_state > 0:
         token = i[0]
         value = i[1]
         if while_loop is True and value != "WHILE" and parser_counter < \
-                functions.find_while_counter(while_values, while_state):
+                functions.find_while_counter(while_values, while_loop_highest_loop):
             pass
         elif condition_state == "FALSE" and value != "ENDIF" and if_skip_state == 1:
             pass
