@@ -5,6 +5,7 @@ file = open("control_flow.txt", "r")  # This is input file for the language to r
 
 code = file.read()
 
+
 def tokenKey(dictionary, value):
     key = []
     for keys in dictionary:
@@ -14,7 +15,7 @@ def tokenKey(dictionary, value):
 
 
 lineScanner = code.split('\n')
-#print(scanner)
+# print(scanner)
 
 wordScanner = []
 wordBroken = []
@@ -42,7 +43,7 @@ for i in wordBroken:
         tokeniser.append(["WORD", i])
     elif i.isnumeric():
         tokeniser.append(["num", int(i)])
-    elif functions.is_variable(wordBroken[(counter-1)]) == "true":
+    elif functions.is_variable(wordBroken[(counter - 1)]) == "true":
         tokeniser.append(["variable", i])
         functions.variable_add(i)
     elif functions.variable_check(i) == "true":
@@ -61,7 +62,7 @@ for i in wordBroken:
 
 print(tokeniser)
 # Parser
-#print(wordBroken)
+# print(wordBroken)
 # 0 = starting point, 1 = variable declaration,
 # 2 variable creation, 3 value assignment, 4 arithmetic mode,
 # 5 operand handling, 6 display handling, 7 left-side assignment,
@@ -82,6 +83,16 @@ variable_list = []  # holds the token and value
 assignment_buffer = []
 equivalence_buffer = []
 sentence_holder = []
+logic_mode = 0
+condition_state = ""
+if_skip_state = 0
+while_values = []
+while_startpoint = 0
+while_loop = False
+while_handling = False
+if_handling = False
+in_while = 0
+while_loop_highest_loop = 0
 
 #  arithmetic engine
 arithmetic_buffer = []  # holds all the values and operand for a specific line
@@ -92,32 +103,45 @@ priority_max = 0  # holds the highest priority in the equation
 bracket_buffer = []  # holds the values relating to within a given bracket
 answer_buffer = []  # holds answers for future buffer rewrites
 display_buffer = []
-logic_mode = 0
-condition_state = ""
-skip_state = 0
 answer = None
 while while_state > 0:
     while_state -= 1
     for i in tokeniser:
         token = i[0]
         value = i[1]
-        if token == "var_keyword":
-            mode = 1
-        elif condition_state == "FALSE" and value != "ENDIF":
+        if while_loop is True and value != "WHILE" and parser_counter < \
+                functions.find_while_counter(while_values, while_state):
+            pass
+        elif condition_state == "FALSE" and value != "ENDIF" and if_skip_state == 1:
             pass
         elif token == "logic_keyword":
             if value == "IF" and mode == 0:
                 logic_mode = 1
                 mode = 3
+                if_handling = True
             elif value == "ENDIF" and mode == 0:
                 mode = 0
                 condition_state = ""
+                if_skip_state = 0
             elif value == "WHILE" and mode == 0:
                 logic_mode = 1
                 mode = 3
+                while_handling = True
+                while_values.append(parser_counter)
+                in_while += 1
                 # TODO implement while specific variables + loops
+            elif value == "ENDWHILE" and mode == 0:
+                if while_loop is True and while_loop_highest_loop == in_while:
+                    while_state += 1
+                    break
+                    # TODO fix when re-looping. debug from the break
+                else:
+                    in_while -= 1
+                    condition_state = ""
             else:
                 errors.error_call(2, line_counter)
+        elif token == "var_keyword":
+            mode = 1
         elif token == "variable":
             if value not in variable_index:
                 if mode == 1 and tokeniser[(parser_counter - 1)][1] == "INT":
@@ -397,7 +421,7 @@ while while_state > 0:
         elif token == "<":
             if mode == 3:
                 answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer, priority_max,
-                                          variable_list, variable_index)
+                                              variable_list, variable_index)
                 equivalence_buffer.append(answer)
                 assignment_buffer.clear()
                 arithmetic_position_buffer.clear()
@@ -424,6 +448,7 @@ while while_state > 0:
                             display_buffer[counter] = variable_list[(variable_index.index(i))][1]
                             counter += 1
                     print(" ".join(str(x) for x in display_buffer))
+                    display_buffer.clear()
                     mode = 0
                 elif mode == 0:
                     pass
@@ -481,7 +506,8 @@ while while_state > 0:
                         arithmetic_position_buffer.clear()
                     else:
                         errors.error_call(3, line_counter)
-                elif mode == 3 and equivalence_mode == 0 and len(assignment_buffer) == 1:  # assign variable with 1 value
+                elif mode == 3 and equivalence_mode == 0 and len(
+                        assignment_buffer) == 1:  # assign variable with 1 value
                     if variable_list[(len(variable_list) - 1)][0] == "INT":
                         variable_list[(len(variable_list) - 1)][1] = int(assignment_buffer[0])
                         mode = 0
@@ -525,10 +551,23 @@ while while_state > 0:
                             variable_list[(len(variable_list) - 1)][1] = assignment_result
                         elif logic_mode == 1:
                             logic_mode = 0
-                            if assignment_result == "TRUE":
-                                condition_state == "TRUE"
+                            if assignment_result == "TRUE" and if_handling is True:
+                                condition_state = "TRUE"
+                                if_handling = False
+                            elif assignment_result == "TRUE" and while_handling is True:
+                                while_loop = True
+                                While_handling = False
+                                if while_loop_highest_loop < in_while:
+                                    while_loop_highest_loop += 1
+                            elif assignment_result == "FALSE" and while_handling is True:
+                                while_values.remove((len(while_values) - 1))
+                                condition_state = "FALSE"
+                                while_handling = False
+                                # TODO sort this as well
                             else:
-                                condition_state == "FALSE"
+                                condition_state = "FALSE"
+                                if_skip_state = 1
+                                if_handling = False
                         equivalence_mode = 0
                         boolean_handling = 0
                         assignment_buffer.clear()
@@ -548,10 +587,22 @@ while while_state > 0:
                             variable_list[(len(variable_list) - 1)][1] = assignment_result
                         elif logic_mode == 1:
                             logic_mode == 0
-                            if assignment_result == "TRUE":
+                            if assignment_result == "TRUE" and if_handling is True:
                                 condition_state == "TRUE"
+                                if_handling = False
+                            elif assignment_result == "TRUE" and while_handling is True:
+                                while_loop = True
+                                While_handling = False
+                                if while_loop_highest_loop < in_while:
+                                    while_loop_highest_loop += 1
+                            elif assignment_result == "FALSE" and while_handling is True:
+                                while_values.remove((len(while_values) - 1))
+                                condition_state = "FALSE"
+                                while_handling = False
                             else:
                                 condition_state == "FALSE"
+                                if_skip_state = 1
+                                if_handling = False
                         mode = 0
                         equivalence_mode = 0
                         assignment_buffer.clear()
@@ -578,5 +629,6 @@ while while_state > 0:
         else:
             errors.error_call(2, line_counter)
         parser_counter += 1
-        print(variable_list, variable_index, mode, value, left_side_buffer, arithmetic_buffer, arithmetic_position_buffer,
-                    assignment_buffer, equivalence_buffer, greater_than_count)
+        print(variable_list, variable_index, mode, value, left_side_buffer, arithmetic_buffer,
+              arithmetic_position_buffer,
+              assignment_buffer, equivalence_buffer, greater_than_count)

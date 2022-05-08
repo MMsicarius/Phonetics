@@ -100,6 +100,11 @@ def less_than (x, y):
     else:
         return "FALSE"
 
+def find_while_counter(y, z):
+    while_array = y
+    state = z
+    return while_array[state]
+
 def simple_arithmetic(x, y, var_list, var_index):
     equation = []
     priority = []
