@@ -133,6 +133,8 @@ while while_state > 0:
             elif value == "ENDWHILE" and mode == 0:
                 if while_loop is True and while_loop_highest_loop == in_while:
                     while_state += 1
+                    parser_counter = 0
+                    line_counter = 1
                     break
                     # TODO fix when re-looping. debug from the break
                 else:
@@ -560,10 +562,9 @@ while while_state > 0:
                                 if while_loop_highest_loop < in_while:
                                     while_loop_highest_loop += 1
                             elif assignment_result == "FALSE" and while_handling is True:
-                                while_values.remove((len(while_values) - 1))
+                                while_values.pop()
                                 condition_state = "FALSE"
                                 while_handling = False
-                                # TODO sort this as well
                             else:
                                 condition_state = "FALSE"
                                 if_skip_state = 1
@@ -596,7 +597,7 @@ while while_state > 0:
                                 if while_loop_highest_loop < in_while:
                                     while_loop_highest_loop += 1
                             elif assignment_result == "FALSE" and while_handling is True:
-                                while_values.remove((len(while_values) - 1))
+                                while_values.pop()
                                 condition_state = "FALSE"
                                 while_handling = False
                             else:
