@@ -39,7 +39,8 @@ line_counter = 1
 for i in wordBroken:
     if functions.is_keyword(i) != "false":
         tokeniser.append([functions.is_keyword(i), i])
-    elif len(tokeniser) > 0 and (tokeniser[(counter - 1)][0] == "SENTENCE" or tokeniser[(counter - 1)][0] == "WORD"):
+    elif len(tokeniser) > 0 and (tokeniser[(counter - 1)][0] == "SENTENCE" or tokeniser[(counter - 1)][0] == "WORD" or
+                                 tokeniser[(counter - 1)][1] == "COMMENT"):
         tokeniser.append(["WORD", i])
     elif i.isnumeric():
         tokeniser.append(["num", int(i)])
@@ -93,6 +94,7 @@ while_handling = False
 if_handling = False
 in_while = 0
 while_loop_highest_loop = 0
+comment = 0
 
 #  arithmetic engine
 arithmetic_buffer = []  # holds all the values and operand for a specific line
@@ -129,14 +131,12 @@ while while_state > 0:
                 while_handling = True
                 while_values.append(parser_counter)
                 in_while += 1
-                # TODO implement while specific variables + loops
             elif value == "ENDWHILE" and mode == 0:
                 if while_loop is True and while_loop_highest_loop == in_while:
                     while_state += 1
                     parser_counter = 0
                     line_counter = 1
                     break
-                    # TODO fix when re-looping. debug from the break
                 else:
                     in_while -= 1
                     condition_state = ""
@@ -186,6 +186,8 @@ while while_state > 0:
         elif token == "WORD":
             if mode == 8:
                 sentence_holder = functions.word_add(str(sentence_holder), str(value))
+            elif comment == 1:
+                pass
             else:
                 errors.error_call(2, line_counter)
         elif token == "=":
@@ -625,6 +627,10 @@ while while_state > 0:
                     mode = 6
                 else:
                     errors.error_call(2, line_counter)
+            elif value == "COMMENT":
+                comment = 1
+            elif value == "ENDCOMMENT":
+                comment = 0
         elif token == "LINE":
             pass
         else:

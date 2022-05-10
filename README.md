@@ -37,6 +37,8 @@ GREATERTHAN -> >
 
 LESSTHAN -> <
 
+WHILE -> while
+
 Generic Keywords:
 
 DISPLAY -> displays and variables, numeric or string data

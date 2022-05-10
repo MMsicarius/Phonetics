@@ -7,7 +7,7 @@ numeric_keywords_translate = ["+", "-", "*", "/", "=", "^", "(", ")", "==", "!="
 
 logic_keywords = ["IF", "ELSE", "AND", "OR", "NOT", "THEN", "ENDIF", "WHILE", "ENDWHILE"]
 
-generic_keywords = ["DISPLAY", "NEWLINE"]
+generic_keywords = ["DISPLAY", "NEWLINE", "COMMENT", "ENDCOMMENT"]
 
 variable_keywords = ["INT", "STRING", "BOOLEAN"]
 
