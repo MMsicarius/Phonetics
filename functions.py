@@ -1,12 +1,14 @@
 import errors
 
-numeric_keywords = ["ADD", "SUB", "MULTIPLY", "DIVIDE", "EQUALS", "POWER", "OPENBRACKET", "CLOSEBRACKET"]
+numeric_keywords = ["ADD", "SUB", "MULTIPLY", "DIVIDE", "EQUALS", "POWER",
+                    "OPENBRACKET", "CLOSEBRACKET", "EQUIV", "NOTEQUIV", "GREATERTHAN", "LESSTHAN"]
 
-numeric_keywords_translate = ["+", "-", "*", "/", "=", "^", "(", ")"]
+numeric_keywords_translate = ["+", "-", "*", "/", "=", "^", "(", ")", "==", "!=", ">", "<"]
 
-# INPUT
-generic_keywords = ["DISPLAY", "NEWLINE"]
-# OUTPUT
+logic_keywords = ["IF", "ELSE", "AND", "OR", "NOT", "THEN", "ENDIF", "WHILE", "ENDWHILE"]
+
+generic_keywords = ["DISPLAY", "NEWLINE", "COMMENT", "ENDCOMMENT"]
+
 variable_keywords = ["INT", "STRING", "BOOLEAN"]
 
 variable_list_tokeniser = []
@@ -19,6 +21,10 @@ def is_keyword(x):
     elif x in numeric_keywords:
         index = numeric_keywords.index(x)
         return numeric_keywords_translate[index]
+    elif x in logic_keywords:
+        return "logic_keyword"
+    elif x == "SENTENCE":
+        return "SENTENCE"
     else:
         return "false"
 
@@ -59,10 +65,45 @@ def power(x, y):
 
 def boolean(x, y):
     if x == y:
-        return True
+        return "TRUE"
     else:
-        return False
-#  TODO Boolean function
+        return "FALSE"
+
+def boolean_not_equal(x, y):
+    if x != y:
+        return "TRUE"
+    else:
+        return "FALSE"
+
+def boolean_handling(x, y):
+    if x and y == "TRUE":
+        return "TRUE"
+    else:
+        return "FALSE"
+
+def word_add(x, y):
+    if x == "[]":
+        return y
+    else:
+        answer = x + " " + y
+        return answer
+
+def greater_than (x, y):
+    if x > y:
+        return "TRUE"
+    else:
+        return "FALSE"
+
+def less_than (x, y):
+    if x < y:
+        return "TRUE"
+    else:
+        return "FALSE"
+
+def find_while_counter(y, z):
+    while_array = y
+    state = z
+    return while_array[(state - 1)]
 
 def simple_arithmetic(x, y, var_list, var_index):
     equation = []
@@ -157,7 +198,6 @@ def simple_arithmetic(x, y, var_list, var_index):
                 for i in midway_position_buffer:
                     priority.append(i)
         priority_counter -= 1
-        #  TODO equation update bug needs fixing
     return equation[0]
 
 

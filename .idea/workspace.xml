@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="779007d1-39e0-4371-9cee-9d37c9d22b58" name="Default Changelist" comment="early working prototype. Arithmetic engine works properly.">
+    <list default="true" id="779007d1-39e0-4371-9cee-9d37c9d22b58" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/first steps.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/first steps.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code.txt" beforeDir="false" afterPath="$PROJECT_DIR$/code.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/control_flow.txt" beforeDir="false" afterPath="$PROJECT_DIR$/control_flow.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/functions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tokeniser.py" beforeDir="false" afterPath="$PROJECT_DIR$/tokeniser.py" afterDir="false" />
     </list>
@@ -20,6 +23,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -45,6 +53,9 @@
         <option value="$PROJECT_DIR$/tokeniser.py" />
       </list>
     </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
@@ -97,17 +108,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="F:/distributed systems v2" />
-    <property name="settings.editor.selected.configurable" value="preferences.updates" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
+  }
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Michael\Documents\ldi\first steps" />
     </key>
   </component>
   <component name="RunManager" selected="Python.tokeniser">
+    <configuration name="errors" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="first steps" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/errors.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="functions" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="first steps" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -142,27 +175,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/lexer.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="lexer" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="first steps" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\Michael\Documents\ldi\first steps\scanner.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -216,10 +228,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.tokeniser" />
+        <item itemvalue="Python.errors" />
         <item itemvalue="Python.functions" />
         <item itemvalue="Python.lexer (1)" />
         <item itemvalue="Python.scanner" />
-        <item itemvalue="Python.lexer" />
       </list>
     </recent_temporary>
   </component>
@@ -270,7 +282,63 @@
       <option name="project" value="LOCAL" />
       <updated>1651286432693</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="arithmatic engine works without bugs. variable checking has been added to the tokeniser. boolean variables implmented.">
+      <created>1651368066510</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1651368066510</updated>
+    </task>
+    <task id="LOCAL-00007" summary="implemented string handling. implemented boolean handling (==, !=). added function to handle these conditions. modified tokeniser to handle both boolean and stings types, variables and words.">
+      <created>1651549018288</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1651549018288</updated>
+    </task>
+    <task id="LOCAL-00008" summary="added greater than functionality to left side of equation">
+      <created>1651559086708</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1651559086708</updated>
+    </task>
+    <task id="LOCAL-00009" summary="&gt; and &lt; fully implemented. == nearly fully implemented. new todo added">
+      <created>1651716689049</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1651716689049</updated>
+    </task>
+    <task id="LOCAL-00010" summary="IF statements added">
+      <created>1651874603929</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1651874603929</updated>
+    </task>
+    <task id="LOCAL-00011" summary="partially added while functionality">
+      <created>1651890954149</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1651890954149</updated>
+    </task>
+    <task id="LOCAL-00012" summary="changed the logic behind while. re-looping need fixing">
+      <created>1651980871039</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1651980871039</updated>
+    </task>
+    <task id="LOCAL-00013" summary="changed the logic behind while. re-looping need fixing">
+      <created>1651981169947</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1651981169947</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TodoView">
@@ -311,12 +379,23 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/boolean+" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added early tokeniser" />
@@ -325,25 +404,22 @@
     <MESSAGE value="parser handles variable assignment and creation. Also updated error handling to include line numbers." />
     <MESSAGE value="implemented first parser. Implemented arithmetic engine though is not currently working properly" />
     <MESSAGE value="early working prototype. Arithmetic engine works properly." />
-    <option name="LAST_COMMIT_MESSAGE" value="early working prototype. Arithmetic engine works properly." />
+    <MESSAGE value="arithmatic engine works without bugs. variable checking has been added to the tokeniser. boolean variables implmented." />
+    <MESSAGE value="implemented string handling. implemented boolean handling (==, !=). added function to handle these conditions. modified tokeniser to handle both boolean and stings types, variables and words." />
+    <MESSAGE value="added greater than functionality to left side of equation" />
+    <MESSAGE value="&gt; and &lt; fully implemented. == nearly fully implemented. new todo added" />
+    <MESSAGE value="IF statements added" />
+    <MESSAGE value="partially added while functionality" />
+    <MESSAGE value="changed the logic behind while. re-looping need fixing" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed the logic behind while. re-looping need fixing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/functions.py</url>
-          <line>141</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/functions.py</url>
-          <line>77</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tokeniser.py</url>
-          <line>38</line>
-          <option name="timeStamp" value="6" />
+          <line>136</line>
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
