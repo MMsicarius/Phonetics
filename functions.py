@@ -5,7 +5,7 @@ numeric_keywords = ["ADD", "SUB", "MULTIPLY", "DIVIDE", "EQUALS", "POWER",
 
 numeric_keywords_translate = ["+", "-", "*", "/", "=", "^", "(", ")", "==", "!=", ">", "<"]
 
-logic_keywords = ["IF", "ELSE", "AND", "OR", "NOT", "THEN", "ENDIF", "WHILE", "ENDWHILE"]
+logic_keywords = ["IF", "ELSE", "ELSEIF", "AND", "OR", "NOT", "THEN", "ENDIF", "WHILE", "ENDWHILE", "ENDELSE"]
 
 generic_keywords = ["DISPLAY", "NEWLINE", "COMMENT", "ENDCOMMENT"]
 
@@ -104,6 +104,16 @@ def find_while_counter(y, z):
     while_array = y
     state = z
     return while_array[(state - 1)]
+
+def value_check(x):
+    if x == "ENDIF":
+        return False
+    elif x == "ELSE":
+        return False
+    elif x == "ENDELSE":
+        return False
+    else:
+        return True
 
 def simple_arithmetic(x, y, var_list, var_index):
     equation = []

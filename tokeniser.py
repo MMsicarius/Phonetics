@@ -95,6 +95,8 @@ if_handling = False
 in_while = 0
 while_loop_highest_loop = 0
 comment = 0
+else_loop = 0
+if_solved = False
 
 #  arithmetic engine
 arithmetic_buffer = []  # holds all the values and operand for a specific line
@@ -114,17 +116,33 @@ while while_state > 0:
         if while_loop is True and value != "WHILE" and parser_counter < \
                 functions.find_while_counter(while_values, while_loop_highest_loop):
             pass
-        elif condition_state == "FALSE" and value != "ENDIF" and if_skip_state == 1:
+        elif condition_state == "FALSE" and functions.value_check(value) is True and if_skip_state == 1:
             pass
         elif token == "logic_keyword":
             if value == "IF" and mode == 0:
                 logic_mode = 1
                 mode = 3
                 if_handling = True
-            elif value == "ENDIF" and mode == 0:
+            elif value == "ELSEIF" and mode == 0 and (else_loop == 1 or if_solved is False):
+                logic_mode = 1
+                mode = 3
+                if_handling = True
+            elif value == "ELSEIF" and mode == 0 and (else_loop == 0 or if_solved is True):
+                if_skip_state = 1
+            elif value == "ELSE" and mode == 0 and (else_loop == 0 or if_solved is True):
+                if_skip_state = 1
+            elif value == "ELSE" and mode == 0 and else_loop == 1 and if_solved is False:
+                pass
+            elif value == "ENDELSE" and mode == 0 and else_loop == 1:
                 mode = 0
                 condition_state = ""
                 if_skip_state = 0
+            elif value == "ENDIF" and mode == 0 and if_solved is False:
+                mode = 0
+                condition_state = ""
+                if_skip_state = 0
+            elif value == "ENDIF" and mode == 0 and if_solved is True:
+                if_skip_state = 1
             elif value == "WHILE" and mode == 0:
                 logic_mode = 1
                 mode = 3
@@ -571,6 +589,8 @@ while while_state > 0:
                                 condition_state = "FALSE"
                                 if_skip_state = 1
                                 if_handling = False
+                                else_loop = 1
+                                if_solved = False
                         equivalence_mode = 0
                         boolean_handling = 0
                         assignment_buffer.clear()
@@ -590,22 +610,25 @@ while while_state > 0:
                             variable_list[(len(variable_list) - 1)][1] = assignment_result
                         elif logic_mode == 1:
                             logic_mode == 0
-                            if assignment_result == "TRUE" and if_handling is True:
+                            if assignment_result == "TRUE" and if_handling is True:  # if true
                                 condition_state == "TRUE"
                                 if_handling = False
-                            elif assignment_result == "TRUE" and while_handling is True:
+                                if_solved = True
+                            elif assignment_result == "TRUE" and while_handling is True:  # while true
                                 while_loop = True
                                 While_handling = False
                                 if while_loop_highest_loop < in_while:
                                     while_loop_highest_loop += 1
-                            elif assignment_result == "FALSE" and while_handling is True:
+                            elif assignment_result == "FALSE" and while_handling is True:  # while false
                                 while_values.pop()
                                 condition_state = "FALSE"
                                 while_handling = False
-                            else:
-                                condition_state == "FALSE"
+                            else:  # if FALSE
+                                condition_state = "FALSE"
                                 if_skip_state = 1
                                 if_handling = False
+                                else_loop = 1
+                                if_solved = False
                         mode = 0
                         equivalence_mode = 0
                         assignment_buffer.clear()
@@ -621,7 +644,6 @@ while while_state > 0:
                     mode = 0
                 else:
                     errors.error_call(2, line_counter)
-                line_counter += 1
             elif value == "DISPLAY":
                 if mode == 0:
                     mode = 6
@@ -635,7 +657,9 @@ while while_state > 0:
             pass
         else:
             errors.error_call(2, line_counter)
+        if value == "NEWLINE":
+            line_counter += 1
         parser_counter += 1
         print(variable_list, variable_index, mode, value, left_side_buffer, arithmetic_buffer,
               arithmetic_position_buffer,
-              assignment_buffer, equivalence_buffer, greater_than_count)
+              assignment_buffer, equivalence_buffer, greater_than_count, if_skip_state)
