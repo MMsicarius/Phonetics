@@ -1,5 +1,6 @@
 import errors
 
+a = .5
 numeric_keywords = ["ADD", "SUB", "MULTIPLY", "DIVIDE", "EQUALS", "POWER",
                     "OPENBRACKET", "CLOSEBRACKET", "EQUIV", "NOTEQUIV", "GREATERTHAN", "LESSTHAN"]
 
@@ -9,9 +10,26 @@ logic_keywords = ["IF", "ELSE", "ELSEIF", "AND", "OR", "NOT", "THEN", "ENDIF", "
 
 generic_keywords = ["DISPLAY", "NEWLINE", "COMMENT", "ENDCOMMENT"]
 
-variable_keywords = ["INT", "STRING", "BOOLEAN"]
+variable_keywords = ["NUMBER", "STRING", "BOOLEAN"]
 
 variable_list_tokeniser = []
+
+
+def is_float(x):  # inspired from https://www.programiz.com/python-programming/examples/check-string-number
+    try:
+        float(x)
+        return True
+    except ValueError:
+        return False
+
+
+def is_numeric(x):
+    try:
+        int(x)
+        return True
+    except ValueError:
+        return False
+
 
 def is_keyword(x):
     if x in generic_keywords:
@@ -28,8 +46,10 @@ def is_keyword(x):
     else:
         return "false"
 
+
 def variable_add(x):
     variable_list_tokeniser.append(x)
+
 
 def variable_check(x):
     if x in variable_list_tokeniser:
@@ -37,31 +57,38 @@ def variable_check(x):
     else:
         return "false"
 
+
 def is_variable(x):
     if x in variable_keywords:
         return "true"
     else:
         return "false"
 
+
 def addition(x, y):
     answer = x + y
     return answer
+
 
 def subtraction(x, y):
     answer = x - y
     return answer
 
+
 def multiply(x, y):
     answer = x * y
     return answer
+
 
 def divide(x, y):
     answer = x / y
     return answer
 
+
 def power(x, y):
     answer = pow(x, y)
     return answer
+
 
 def boolean(x, y):
     if x == y:
@@ -69,17 +96,20 @@ def boolean(x, y):
     else:
         return "FALSE"
 
+
 def boolean_not_equal(x, y):
     if x != y:
         return "TRUE"
     else:
         return "FALSE"
 
+
 def boolean_handling(x, y):
     if x and y == "TRUE":
         return "TRUE"
     else:
         return "FALSE"
+
 
 def word_add(x, y):
     if x == "[]":
@@ -88,22 +118,26 @@ def word_add(x, y):
         answer = x + " " + y
         return answer
 
-def greater_than (x, y):
+
+def greater_than(x, y):
     if x > y:
         return "TRUE"
     else:
         return "FALSE"
 
-def less_than (x, y):
+
+def less_than(x, y):
     if x < y:
         return "TRUE"
     else:
         return "FALSE"
 
+
 def find_while_counter(y, z):
     while_array = y
     state = z
     return while_array[(state - 1)]
+
 
 def value_check(x):
     if x == "ENDIF":
@@ -114,6 +148,7 @@ def value_check(x):
         return False
     else:
         return True
+
 
 def simple_arithmetic(x, y, var_list, var_index):
     equation = []
@@ -147,11 +182,11 @@ def simple_arithmetic(x, y, var_list, var_index):
             answer_buffer.clear()
             for i in priority:
                 if i == 5 and priority_counter == 5:
-                    input_1 = equation[(counter-1)]
-                    input_2 = equation[(counter+1)]
+                    input_1 = equation[(counter - 1)]
+                    input_2 = equation[(counter + 1)]
                     answer = power(input_1, input_2)
                     answer_buffer.append(answer)
-                    answer_buffer.append((counter-1))
+                    answer_buffer.append((counter - 1))
                     exists += 1
                 elif i == 4 and priority_counter == 4:
                     input_1 = equation[(counter - 1)]

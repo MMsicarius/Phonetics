@@ -1,7 +1,7 @@
 import functions
 import errors
 
-file = open("control_flow.txt", "r")  # This is input file for the language to read
+file = open("arithmetic.txt", "r")  # This is input file for the language to read
 
 code = file.read()
 
@@ -42,8 +42,11 @@ for i in wordBroken:
     elif len(tokeniser) > 0 and (tokeniser[(counter - 1)][0] == "SENTENCE" or tokeniser[(counter - 1)][0] == "WORD" or
                                  tokeniser[(counter - 1)][1] == "COMMENT"):
         tokeniser.append(["WORD", i])
-    elif i.isnumeric():
-        tokeniser.append(["num", int(i)])
+    elif functions.is_numeric(i) or functions.is_float(i):
+        if functions.is_numeric(i):
+            tokeniser.append(["num", int(i)])
+        else:
+            tokeniser.append(["num", float(i)])
     elif functions.is_variable(wordBroken[(counter - 1)]) == "true":
         tokeniser.append(["variable", i])
         functions.variable_add(i)
@@ -51,6 +54,8 @@ for i in wordBroken:
         tokeniser.append(["variable", i])
     elif i == "TRUE" or i == "FALSE":
         tokeniser.append(["boolean", i])
+    elif i == "NONE":
+        tokeniser.append(["NONE", None])
     elif i == "":
         tokeniser.append(["LINE", i])
     elif i in functions.numeric_keywords_translate:
@@ -164,7 +169,7 @@ while while_state > 0:
             mode = 1
         elif token == "variable":
             if value not in variable_index:
-                if mode == 1 and tokeniser[(parser_counter - 1)][1] == "INT":
+                if mode == 1 and tokeniser[(parser_counter - 1)][1] == "NUMBER":
                     variable_index.append(value)
                     variable_list.append([tokeniser[(parser_counter - 1)][1], None])
                     mode = 2
@@ -291,6 +296,9 @@ while while_state > 0:
                 assignment_buffer.clear()
             else:
                 errors.error_call(2, line_counter)
+        elif token == "NONE":
+            if mode == 3:
+                assignment_buffer.append(value)
         elif token == "num":
             if mode == 3:
                 assignment_buffer.append(value)
@@ -475,16 +483,21 @@ while while_state > 0:
                 elif mode == 0:
                     pass
                 elif mode == 5 and equivalence_mode == 0:  # assigning new values to existing variables
-                    for j in left_side_buffer:
-                        answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer,
-                                                      priority_max, variable_list, variable_index)
-                        position = variable_index.index(j)
-                        variable_list[position][1] = answer
-                    arithmetic_buffer.clear()
-                    arithmetic_position_buffer.clear()
-                    left_side_buffer.clear()
-                    priority_max = 0
-                    mode = 0
+                    if len(assignment_buffer) > 0:
+                        if assignment_buffer[0] is None:
+                            position = variable_index.index(assignment_buffer[0])
+                            variable_list[position][1] = None
+                    else:
+                        for j in left_side_buffer:
+                            answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer,
+                                                          priority_max, variable_list, variable_index)
+                            position = variable_index.index(j)
+                            variable_list[position][1] = answer
+                        arithmetic_buffer.clear()
+                        arithmetic_position_buffer.clear()
+                        left_side_buffer.clear()
+                        priority_max = 0
+                        mode = 0
                 elif mode == 5 and greater_than_count != 0:
                     if greater_than_count == 1:
                         answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer,
@@ -516,8 +529,8 @@ while while_state > 0:
                     # equation involved
                     answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer,
                                                   priority_max, variable_list, variable_index)
-                    if variable_list[(len(variable_list) - 1)][0] == "INT":
-                        variable_list[(len(variable_list) - 1)][1] = int(answer)
+                    if variable_list[(len(variable_list) - 1)][0] == "NUMBER":
+                        variable_list[(len(variable_list) - 1)][1] = answer
                         mode = 0
                         assignment_buffer.clear()
                         arithmetic_position_buffer.clear()
@@ -530,8 +543,8 @@ while while_state > 0:
                         errors.error_call(3, line_counter)
                 elif mode == 3 and equivalence_mode == 0 and len(
                         assignment_buffer) == 1:  # assign variable with 1 value
-                    if variable_list[(len(variable_list) - 1)][0] == "INT":
-                        variable_list[(len(variable_list) - 1)][1] = int(assignment_buffer[0])
+                    if variable_list[(len(variable_list) - 1)][0] == "NUMBER":
+                        variable_list[(len(variable_list) - 1)][1] = assignment_buffer[0]
                         mode = 0
                         assignment_buffer.clear()
                         arithmetic_position_buffer.clear()
