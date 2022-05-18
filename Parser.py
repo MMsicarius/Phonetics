@@ -1,7 +1,7 @@
 import functions
 import errors
 
-file = open("control_flow.txt", "r")  # This is input file for the language to read
+file = open("full_example.txt", "r")  # This is input file for the language to read
 
 code = file.read()
 
@@ -42,8 +42,11 @@ for i in wordBroken:
     elif len(tokeniser) > 0 and (tokeniser[(counter - 1)][0] == "SENTENCE" or tokeniser[(counter - 1)][0] == "WORD" or
                                  tokeniser[(counter - 1)][1] == "COMMENT"):
         tokeniser.append(["WORD", i])
-    elif i.isnumeric():
-        tokeniser.append(["num", int(i)])
+    elif functions.is_numeric(i) or functions.is_float(i):
+        if functions.is_numeric(i):
+            tokeniser.append(["num", int(i)])
+        else:
+            tokeniser.append(["num", float(i)])
     elif functions.is_variable(wordBroken[(counter - 1)]) == "true":
         tokeniser.append(["variable", i])
         functions.variable_add(i)
@@ -51,6 +54,8 @@ for i in wordBroken:
         tokeniser.append(["variable", i])
     elif i == "TRUE" or i == "FALSE":
         tokeniser.append(["boolean", i])
+    elif i == "NONE":
+        tokeniser.append(["NONE", None])
     elif i == "":
         tokeniser.append(["LINE", i])
     elif i in functions.numeric_keywords_translate:
@@ -61,7 +66,6 @@ for i in wordBroken:
         line_counter += 1
     counter += 1
 
-print(tokeniser)
 # Parser
 # print(wordBroken)
 # 0 = starting point, 1 = variable declaration,
@@ -95,6 +99,8 @@ if_handling = False
 in_while = 0
 while_loop_highest_loop = 0
 comment = 0
+else_loop = 0
+if_solved = False
 
 #  arithmetic engine
 arithmetic_buffer = []  # holds all the values and operand for a specific line
@@ -114,17 +120,38 @@ while while_state > 0:
         if while_loop is True and value != "WHILE" and parser_counter < \
                 functions.find_while_counter(while_values, while_loop_highest_loop):
             pass
-        elif condition_state == "FALSE" and value != "ENDIF" and if_skip_state == 1:
+        elif condition_state == "FALSE" and functions.value_check(value) is True and if_skip_state == 1:
             pass
         elif token == "logic_keyword":
             if value == "IF" and mode == 0:
                 logic_mode = 1
                 mode = 3
                 if_handling = True
-            elif value == "ENDIF" and mode == 0:
+            elif value == "ELSEIF" and mode == 0 and (else_loop == 1 or if_solved is False):
+                logic_mode = 1
+                mode = 3
+                if_handling = True
+            elif value == "ELSEIF" and mode == 0 and (else_loop == 0 or if_solved is True):
+                if_skip_state = 1
+            elif value == "ELSE" and mode == 0 and (else_loop == 0 or if_solved is True):
+                if_skip_state = 1
+            elif value == "ELSE" and mode == 0 and else_loop == 1 and if_solved is False:
+                pass
+            elif value == "ENDELSE" and mode == 0 and else_loop == 1:
                 mode = 0
                 condition_state = ""
                 if_skip_state = 0
+            elif value == "ENDELSE" and mode == 0 and if_skip_state == 1:
+                mode = 0
+                condition_state = ""
+                if_skip_state = 0
+            elif value == "ENDIF" and mode == 0 and if_solved is False:
+                mode = 0
+                condition_state = ""
+                if_skip_state = 0
+            elif value == "ENDIF" and mode == 0 and if_solved is True:
+                if_skip_state = 1
+                condition_state = "FALSE"
             elif value == "WHILE" and mode == 0:
                 logic_mode = 1
                 mode = 3
@@ -146,7 +173,7 @@ while while_state > 0:
             mode = 1
         elif token == "variable":
             if value not in variable_index:
-                if mode == 1 and tokeniser[(parser_counter - 1)][1] == "INT":
+                if mode == 1 and tokeniser[(parser_counter - 1)][1] == "NUMBER":
                     variable_index.append(value)
                     variable_list.append([tokeniser[(parser_counter - 1)][1], None])
                     mode = 2
@@ -181,6 +208,8 @@ while while_state > 0:
                 mode = 8
             elif mode == 8:
                 mode = 3
+            elif mode == 4:
+                mode = 8
             else:
                 errors.error_call(2, line_counter)
         elif token == "WORD":
@@ -273,6 +302,9 @@ while while_state > 0:
                 assignment_buffer.clear()
             else:
                 errors.error_call(2, line_counter)
+        elif token == "NONE":
+            if mode == 3:
+                assignment_buffer.append(value)
         elif token == "num":
             if mode == 3:
                 assignment_buffer.append(value)
@@ -457,16 +489,21 @@ while while_state > 0:
                 elif mode == 0:
                     pass
                 elif mode == 5 and equivalence_mode == 0:  # assigning new values to existing variables
-                    for j in left_side_buffer:
-                        answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer,
-                                                      priority_max, variable_list, variable_index)
-                        position = variable_index.index(j)
-                        variable_list[position][1] = answer
-                    arithmetic_buffer.clear()
-                    arithmetic_position_buffer.clear()
-                    left_side_buffer.clear()
-                    priority_max = 0
-                    mode = 0
+                    if len(assignment_buffer) > 0:
+                        if assignment_buffer[0] is None:
+                            position = variable_index.index(assignment_buffer[0])
+                            variable_list[position][1] = None
+                    else:
+                        for j in left_side_buffer:
+                            answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer,
+                                                          priority_max, variable_list, variable_index)
+                            position = variable_index.index(j)
+                            variable_list[position][1] = answer
+                        arithmetic_buffer.clear()
+                        arithmetic_position_buffer.clear()
+                        left_side_buffer.clear()
+                        priority_max = 0
+                        mode = 0
                 elif mode == 5 and greater_than_count != 0:
                     if greater_than_count == 1:
                         answer = functions.arithmetic(arithmetic_buffer, arithmetic_position_buffer,
@@ -498,8 +535,8 @@ while while_state > 0:
                     # equation involved
                     answer = functions.arithmetic(assignment_buffer, arithmetic_position_buffer,
                                                   priority_max, variable_list, variable_index)
-                    if variable_list[(len(variable_list) - 1)][0] == "INT":
-                        variable_list[(len(variable_list) - 1)][1] = int(answer)
+                    if variable_list[(len(variable_list) - 1)][0] == "NUMBER":
+                        variable_list[(len(variable_list) - 1)][1] = answer
                         mode = 0
                         assignment_buffer.clear()
                         arithmetic_position_buffer.clear()
@@ -512,8 +549,8 @@ while while_state > 0:
                         errors.error_call(3, line_counter)
                 elif mode == 3 and equivalence_mode == 0 and len(
                         assignment_buffer) == 1:  # assign variable with 1 value
-                    if variable_list[(len(variable_list) - 1)][0] == "INT":
-                        variable_list[(len(variable_list) - 1)][1] = int(assignment_buffer[0])
+                    if variable_list[(len(variable_list) - 1)][0] == "NUMBER":
+                        variable_list[(len(variable_list) - 1)][1] = assignment_buffer[0]
                         mode = 0
                         assignment_buffer.clear()
                         arithmetic_position_buffer.clear()
@@ -521,6 +558,11 @@ while while_state > 0:
                         variable_list[(len(variable_list) - 1)][1] = assignment_buffer[0]
                         mode = 0
                         boolean_handling = 0
+                        assignment_buffer.clear()
+                        arithmetic_position_buffer.clear()
+                    elif variable_list[(len(variable_list) - 1)][0] == "STRING":
+                        variable_list[(len(variable_list) - 1)][1] = assignment_buffer[0]
+                        mode = 0
                         assignment_buffer.clear()
                         arithmetic_position_buffer.clear()
                     else:
@@ -558,6 +600,7 @@ while while_state > 0:
                             if assignment_result == "TRUE" and if_handling is True:
                                 condition_state = "TRUE"
                                 if_handling = False
+                                if_solved = True
                             elif assignment_result == "TRUE" and while_handling is True:
                                 while_loop = True
                                 While_handling = False
@@ -571,6 +614,8 @@ while while_state > 0:
                                 condition_state = "FALSE"
                                 if_skip_state = 1
                                 if_handling = False
+                                else_loop = 1
+                                if_solved = False
                         equivalence_mode = 0
                         boolean_handling = 0
                         assignment_buffer.clear()
@@ -590,22 +635,25 @@ while while_state > 0:
                             variable_list[(len(variable_list) - 1)][1] = assignment_result
                         elif logic_mode == 1:
                             logic_mode == 0
-                            if assignment_result == "TRUE" and if_handling is True:
+                            if assignment_result == "TRUE" and if_handling is True:  # if true
                                 condition_state == "TRUE"
                                 if_handling = False
-                            elif assignment_result == "TRUE" and while_handling is True:
+                                if_solved = True
+                            elif assignment_result == "TRUE" and while_handling is True:  # while true
                                 while_loop = True
                                 While_handling = False
                                 if while_loop_highest_loop < in_while:
                                     while_loop_highest_loop += 1
-                            elif assignment_result == "FALSE" and while_handling is True:
+                            elif assignment_result == "FALSE" and while_handling is True:  # while false
                                 while_values.pop()
                                 condition_state = "FALSE"
                                 while_handling = False
-                            else:
-                                condition_state == "FALSE"
+                            else:  # if FALSE
+                                condition_state = "FALSE"
                                 if_skip_state = 1
                                 if_handling = False
+                                else_loop = 1
+                                if_solved = False
                         mode = 0
                         equivalence_mode = 0
                         assignment_buffer.clear()
@@ -621,7 +669,6 @@ while while_state > 0:
                     mode = 0
                 else:
                     errors.error_call(2, line_counter)
-                line_counter += 1
             elif value == "DISPLAY":
                 if mode == 0:
                     mode = 6
@@ -635,7 +682,6 @@ while while_state > 0:
             pass
         else:
             errors.error_call(2, line_counter)
+        if value == "NEWLINE":
+            line_counter += 1
         parser_counter += 1
-        print(variable_list, variable_index, mode, value, left_side_buffer, arithmetic_buffer,
-              arithmetic_position_buffer,
-              assignment_buffer, equivalence_buffer, greater_than_count)
