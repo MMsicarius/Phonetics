@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="779007d1-39e0-4371-9cee-9d37c9d22b58" name="Default Changelist" comment="final version. add string + number concateration +. added NONE assignment for strings">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/boolean.txt" beforeDir="false" afterPath="$PROJECT_DIR$/boolean.txt" afterDir="false" />
+    <list default="true" id="779007d1-39e0-4371-9cee-9d37c9d22b58" name="Default Changelist" comment="updated coding files + README.md">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Parser.py" beforeDir="false" afterPath="$PROJECT_DIR$/Parser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/arithmetic.txt" beforeDir="false" afterPath="$PROJECT_DIR$/arithmetic.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/functions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -340,7 +342,14 @@
       <option name="project" value="LOCAL" />
       <updated>1652835887883</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="updated coding files + README.md">
+      <created>1652836430094</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1652836430094</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TodoView">
@@ -414,25 +423,16 @@
     <MESSAGE value="partially added while functionality" />
     <MESSAGE value="changed the logic behind while. re-looping need fixing" />
     <MESSAGE value="final version. add string + number concateration +. added NONE assignment for strings" />
-    <option name="LAST_COMMIT_MESSAGE" value="final version. add string + number concateration +. added NONE assignment for strings" />
+    <MESSAGE value="updated coding files + README.md" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated coding files + README.md" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Parser.py</url>
-          <line>136</line>
-          <option name="timeStamp" value="39" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/functions.py</url>
-          <line>68</line>
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Parser.py</url>
-          <line>211</line>
-          <option name="timeStamp" value="46" />
+          <line>303</line>
+          <option name="timeStamp" value="52" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

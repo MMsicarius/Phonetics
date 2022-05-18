@@ -287,37 +287,47 @@ def arithmetic(a_buffer, p_buffer, p_max, var_list, var_index):
     while position_max >= 6:
         in_bracket = 0
         counter = 0
+        loop_handled = False
         exists = 1
         for i in position_buffer:
-            if i == position_max and in_bracket == 0:
+            if i == position_max and in_bracket == 0 and loop_handled is False:  # when the open bracket is met
                 in_bracket = 1
                 exists += 1
-            elif in_bracket == 1:
-                bracket_buffer.append(answer_buffer[counter])
+            elif i != position_max and in_bracket == 1 and loop_handled is False:  # values in the bracket
+                bracket_buffer.append(arithmetic_buffer_[counter])
                 bracket_position_buffer.append(i)
-            elif i == position_max and in_bracket == 1:
-                in_bracket == 0
+            elif i == position_max and in_bracket == 1:  # when the close bracket is met
+                in_bracket = 0
+                loop_handled = True
             counter += 1
-        answer = simple_arithmetic(bracket_buffer, bracket_position_buffer, variable_list, variable_index)
+        if loop_handled is True:
+            answer = simple_arithmetic(bracket_buffer, bracket_position_buffer, variable_list, variable_index)
         loop_counter = 0
         finished = None
-        for i in bracket_buffer:
-            if i == "(" and in_bracket == 0 and finished is None:
+        for i in arithmetic_buffer_:
+            if i == "(" and in_bracket == 0 and finished is None and position_buffer[loop_counter] == position_max:
                 midway_buffer.append(answer)
                 midway_position_buffer.append(0)
-                start_position = loop_counter
                 in_bracket = 1
             elif in_bracket == 1 and i != ")":
                 pass
             elif i == ")" and finished is None:
                 finished = 1
+                in_bracket = 0
             else:
                 midway_buffer.append(i)
                 midway_position_buffer.append((position_buffer[loop_counter]))
+            loop_counter += 1
+        bracket_buffer.clear()
+        bracket_position_buffer.clear()
         arithmetic_buffer_.clear()
         position_buffer.clear()
-        arithmetic_buffer_ = midway_buffer
-        position_buffer = midway_position_buffer
+        for i in midway_buffer:
+            arithmetic_buffer_.append(i)
+        for i in midway_position_buffer:
+            position_buffer.append(i)
+        midway_buffer.clear()
+        midway_position_buffer.clear()
         exists -= 1
         if exists == 0:
             position_max -= 1
