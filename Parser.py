@@ -1,7 +1,7 @@
 import functions
 import errors
 
-file = open("full_example.txt", "r")  # This is input file for the language to read
+file = open("arithmetic.txt", "r")  # This is input file for the language to read
 
 code = file.read()
 
@@ -419,7 +419,7 @@ while while_state > 0:
             else:
                 errors.error_call(2, line_counter)
         elif token == ")":
-            if mode == 4:
+            if mode == 4 or mode == 5:
                 arithmetic_buffer.append(token)
                 arithmetic_position_buffer.append(bracket_priority)
                 if priority_max < bracket_priority:
