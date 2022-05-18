@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="779007d1-39e0-4371-9cee-9d37c9d22b58" name="Default Changelist" comment="ELSEIF and ELSE implemented">
-      <change afterPath="$PROJECT_DIR$/full_example.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/first steps.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/first steps.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/control_flow.txt" beforeDir="false" afterPath="$PROJECT_DIR$/control_flow.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/string.txt" beforeDir="false" afterPath="$PROJECT_DIR$/string.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tokeniser.py" beforeDir="false" afterPath="$PROJECT_DIR$/Parser.py" afterDir="false" />
+    <list default="true" id="779007d1-39e0-4371-9cee-9d37c9d22b58" name="Default Changelist" comment="final version. add string + number concateration +. added NONE assignment for strings">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/boolean.txt" beforeDir="false" afterPath="$PROJECT_DIR$/boolean.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -339,7 +333,14 @@
       <option name="project" value="LOCAL" />
       <updated>1651981169947</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="final version. add string + number concateration +. added NONE assignment for strings">
+      <created>1652835887883</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1652835887883</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TodoView">
@@ -412,7 +413,8 @@
     <MESSAGE value="IF statements added" />
     <MESSAGE value="partially added while functionality" />
     <MESSAGE value="changed the logic behind while. re-looping need fixing" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed the logic behind while. re-looping need fixing" />
+    <MESSAGE value="final version. add string + number concateration +. added NONE assignment for strings" />
+    <option name="LAST_COMMIT_MESSAGE" value="final version. add string + number concateration +. added NONE assignment for strings" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
