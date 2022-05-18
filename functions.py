@@ -66,7 +66,27 @@ def is_variable(x):
 
 
 def addition(x, y):
-    answer = x + y
+    number_counter = 0
+    string_position = 0
+    if is_numeric(x) or is_float(x):
+        number_counter += 1
+    else:
+        string_position += 1
+    if is_numeric(y) or is_float(y):
+        number_counter += 1
+    else:
+        string_position += 2
+
+    if number_counter == 2:
+        answer = x + y
+    elif number_counter == 0 and string_position == 3:
+        answer = x + y
+    elif number_counter == 1 and string_position == 1:
+        answer = x + " " + str(y)
+    elif number_counter == 1 and string_position == 2:
+        answer = str(x) + " " + y
+    else:
+        answer = x + y
     return answer
 
 
@@ -115,7 +135,12 @@ def word_add(x, y):
     if x == "[]":
         return y
     else:
-        answer = x + " " + y
+        if is_numeric(y):
+            answer = x + " " + str(y)
+        elif is_float(y):
+            answer = x + " " + str(y)
+        else:
+            answer = x + " " + y
         return answer
 
 

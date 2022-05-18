@@ -1,7 +1,7 @@
 import functions
 import errors
 
-file = open("arithmetic.txt", "r")  # This is input file for the language to read
+file = open("full_example.txt", "r")  # This is input file for the language to read
 
 code = file.read()
 
@@ -66,7 +66,6 @@ for i in wordBroken:
         line_counter += 1
     counter += 1
 
-print(tokeniser)
 # Parser
 # print(wordBroken)
 # 0 = starting point, 1 = variable declaration,
@@ -142,12 +141,17 @@ while while_state > 0:
                 mode = 0
                 condition_state = ""
                 if_skip_state = 0
+            elif value == "ENDELSE" and mode == 0 and if_skip_state == 1:
+                mode = 0
+                condition_state = ""
+                if_skip_state = 0
             elif value == "ENDIF" and mode == 0 and if_solved is False:
                 mode = 0
                 condition_state = ""
                 if_skip_state = 0
             elif value == "ENDIF" and mode == 0 and if_solved is True:
                 if_skip_state = 1
+                condition_state = "FALSE"
             elif value == "WHILE" and mode == 0:
                 logic_mode = 1
                 mode = 3
@@ -204,6 +208,8 @@ while while_state > 0:
                 mode = 8
             elif mode == 8:
                 mode = 3
+            elif mode == 4:
+                mode = 8
             else:
                 errors.error_call(2, line_counter)
         elif token == "WORD":
@@ -554,6 +560,11 @@ while while_state > 0:
                         boolean_handling = 0
                         assignment_buffer.clear()
                         arithmetic_position_buffer.clear()
+                    elif variable_list[(len(variable_list) - 1)][0] == "STRING":
+                        variable_list[(len(variable_list) - 1)][1] = assignment_buffer[0]
+                        mode = 0
+                        assignment_buffer.clear()
+                        arithmetic_position_buffer.clear()
                     else:
                         errors.error_call(3, line_counter)
                 elif mode == 3 and equivalence_mode == 1:  # assign boolean output from 2 sides
@@ -589,6 +600,7 @@ while while_state > 0:
                             if assignment_result == "TRUE" and if_handling is True:
                                 condition_state = "TRUE"
                                 if_handling = False
+                                if_solved = True
                             elif assignment_result == "TRUE" and while_handling is True:
                                 while_loop = True
                                 While_handling = False
@@ -673,6 +685,3 @@ while while_state > 0:
         if value == "NEWLINE":
             line_counter += 1
         parser_counter += 1
-        print(variable_list, variable_index, mode, value, left_side_buffer, arithmetic_buffer,
-              arithmetic_position_buffer,
-              assignment_buffer, equivalence_buffer, greater_than_count, if_skip_state)
